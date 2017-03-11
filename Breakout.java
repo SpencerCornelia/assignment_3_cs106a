@@ -66,7 +66,32 @@ public class Breakout extends GraphicsProgram {
 /* Method: run() */
 /** Runs the Breakout program. */
 	public void run() {
-		/* You fill this in, along with any subsidiary methods */
+		gameSetup();
+		playGame();
+	}
+	
+	public void gameSetup() {
+		setUpBricks();
+	}
+	
+	public void setUpBricks() {
+		int rowCounter = 0;
+		int nextBrick = BRICK_SEP;
+		int nextRow = BRICK_Y_OFFSET;
+		while (rowCounter != 10) {	
+			for (int i = 1; i <= 10; i++) {
+				GRect grect = new GRect(nextBrick, nextRow, BRICK_WIDTH, BRICK_HEIGHT);
+				add(grect);
+				nextBrick += (BRICK_SEP + BRICK_WIDTH);
+			}	
+				nextBrick = BRICK_SEP;
+				nextRow += (BRICK_SEP + BRICK_HEIGHT);
+				rowCounter++;
+		}		
+	}
+	
+	public void playGame() {
+		
 	}
 
 }
