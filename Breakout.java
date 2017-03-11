@@ -83,6 +83,40 @@ public class Breakout extends GraphicsProgram {
 				GRect grect = new GRect(nextBrick, nextRow, BRICK_WIDTH, BRICK_HEIGHT);
 				add(grect);
 				nextBrick += (BRICK_SEP + BRICK_WIDTH);
+				switch (rowCounter) {
+					case 0: grect.setFillColor(Color.red);
+						grect.setFilled(true);
+						break;
+					case 1: grect.setFillColor(Color.red);
+						grect.setFilled(true);
+						break;
+					case 2: grect.setFillColor(Color.orange);
+						grect.setFilled(true);
+						break;
+					case 3: grect.setFillColor(Color.orange);
+						grect.setFilled(true);
+						break;
+					case 4: grect.setFillColor(Color.yellow);
+						grect.setFilled(true);
+						break;
+					case 5: grect.setFillColor(Color.yellow);
+						grect.setFilled(true);
+						break;
+					case 6: grect.setFillColor(Color.green);
+						grect.setFilled(true);
+						break;
+					case 7: grect.setFillColor(Color.green);
+						grect.setFilled(true);
+						break;
+					case 8: grect.setFillColor(Color.cyan);
+						grect.setFilled(true);
+						break;
+					case 9: grect.setFillColor(Color.cyan);
+						grect.setFilled(true);
+						break;
+					default: grect.setFilled(false); 
+					break;
+				}
 			}	
 				nextBrick = BRICK_SEP;
 				nextRow += (BRICK_SEP + BRICK_HEIGHT);
