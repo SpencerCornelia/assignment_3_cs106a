@@ -72,14 +72,15 @@ public class Breakout extends GraphicsProgram {
 	
 	public void gameSetup() {
 		setUpBricks();
+		setUpPaddle();
 	}
 	
 	public void setUpBricks() {
 		int rowCounter = 0;
 		int nextBrick = BRICK_SEP;
 		int nextRow = BRICK_Y_OFFSET;
-		while (rowCounter != 10) {	
-			for (int i = 1; i <= 10; i++) {
+		for (int x = 0; x < NBRICK_ROWS; x++) {	
+			for (int i = 1; i <= NBRICKS_PER_ROW; i++) {
 				GRect grect = new GRect(nextBrick, nextRow, BRICK_WIDTH, BRICK_HEIGHT);
 				add(grect);
 				nextBrick += (BRICK_SEP + BRICK_WIDTH);
@@ -122,6 +123,29 @@ public class Breakout extends GraphicsProgram {
 				nextRow += (BRICK_SEP + BRICK_HEIGHT);
 				rowCounter++;
 		}		
+	}
+	
+	public GRect paddle;
+	
+	public void setUpPaddle() {
+		double x = (getWidth() - PADDLE_WIDTH) / 2;
+		double y = getHeight() - PADDLE_Y_OFFSET;
+		paddle = new GRect(x, y, PADDLE_WIDTH, PADDLE_HEIGHT);
+		add(paddle);
+		paddle.setFillColor(Color.black);
+		paddle.setFilled(true);
+		addMouseListeners();
+	}
+	
+	public void mouseMoved(MouseEvent e) {
+		/*
+		 * Paddle can't exit the screen on the left side or right side
+		 * check e.getX() for the location of the paddle
+		 * setLocation sets location of center of paddle
+		 */
+		if ((e.getX() < getWidth() - PADDLE_WIDTH/2) && (e.getX() > PADDLE_WIDTH/2)) {
+			paddle.setLocation(e.getX() - PADDLE_WIDTH / 2, getHeight() - PADDLE_Y_OFFSET);
+		}
 	}
 	
 	public void playGame() {
