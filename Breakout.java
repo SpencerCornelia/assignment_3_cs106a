@@ -81,17 +81,13 @@ public class Breakout extends GraphicsProgram {
 /* Method: run() */
 /** Runs the Breakout program. */
 	public void run() {
+		setUpPaddle();
+		setUpBricks();
 		while (NUM_TURNS_LEFT > 0) {	
-			gameSetup();
+			createBall();
 			playGame();
 		}
 		ball.setVisible(false);
-	}
-	
-	private void gameSetup() {
-		setUpBricks();
-		setUpPaddle();
-		createBall();
 	}
 	
 	private void setUpBricks() {
@@ -148,7 +144,7 @@ public class Breakout extends GraphicsProgram {
 	
 	private void setUpPaddle() {
 		double x = (getWidth() - PADDLE_WIDTH) / 2;
-		double y = getHeight() - PADDLE_Y_OFFSET;
+		double y = getHeight() - (PADDLE_Y_OFFSET + PADDLE_HEIGHT);
 		paddle = new GRect(x, y, PADDLE_WIDTH, PADDLE_HEIGHT);
 		add(paddle);
 		paddle.setFillColor(Color.black);
@@ -209,11 +205,11 @@ public class Breakout extends GraphicsProgram {
 	private void moveBall() {
 		ball.move(vx, vy);
 		/** check for ball bouncing off the wall, need to invert the vx */
-		if ((ball.getX() <= (0 + BALL_RADIUS*2)) || (ball.getX() >= (getWidth() - BALL_RADIUS*2))) {
+		if ((ball.getX() <= 0) || (ball.getX() >= (getWidth() - BALL_RADIUS*2))) {
 			vx = -vx;
 		}
 		
-		if (ball.getY() <= 0 && vy == 0) {
+		if (ball.getY() <= 0) {
 			vy = -vy;
 		}
 		
@@ -221,6 +217,7 @@ public class Breakout extends GraphicsProgram {
 		GObject collider = getCollidingObject();
 		
 		if (collider == paddle) {
+			vy = -vy;
 			if (ball.getY() == (getHeight() - (PADDLE_Y_OFFSET + PADDLE_HEIGHT + BALL_RADIUS*2))) {
 				vy = -vy;
 			}
