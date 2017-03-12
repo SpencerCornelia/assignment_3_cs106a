@@ -201,12 +201,15 @@ public class Breakout extends GraphicsProgram {
 	private void getBallVelocity() {
 		vy = 3.0;
 		vx = rgen.nextDouble(1.0, 6.0);
+		if (rgen.nextBoolean(0.5)) {
+			vx = -vx;
+		}
 	}
 	
 	private void moveBall() {
 		ball.move(vx, vy);
 		/** check for ball bouncing off the wall, need to invert the vx */
-		if ((ball.getX() <= 0 && vx == 0) || (ball.getX() >= (getWidth() - BALL_RADIUS*2))) {
+		if ((ball.getX() <= (0 + BALL_RADIUS*2)) || (ball.getX() >= (getWidth() - BALL_RADIUS*2))) {
 			vx = -vx;
 		}
 		
@@ -232,6 +235,12 @@ public class Breakout extends GraphicsProgram {
 	private GObject getCollidingObject() {
 		if ( (getElementAt(ball.getX(), ball.getY()) ) != null) {
 			return getElementAt(ball.getX(), ball.getY());
+		} else if ( getElementAt((ball.getX() + BALL_RADIUS*2), ball.getY()) != null) {
+			return getElementAt((ball.getX() + BALL_RADIUS*2), ball.getY());
+		} else if ( getElementAt( ball.getX(), ball.getY() + BALL_RADIUS*2 ) != null) {
+			return getElementAt( ball.getX(), ball.getY() + BALL_RADIUS*2 );
+		} else if ( getElementAt(ball.getX() + BALL_RADIUS*2, ball.getY() + BALL_RADIUS*2) != null) {
+			return getElementAt(ball.getX() + BALL_RADIUS*2, ball.getY() + BALL_RADIUS*2);
 		} else {
 			return null;
 		}
