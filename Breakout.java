@@ -187,6 +187,7 @@ public class Breakout extends GraphicsProgram {
 		waitForClick();
 		getBallVelocity();
 		while (true) {
+			moveBall();
 			if (ball.getY() >= getHeight()) {
 				NUM_TURNS_LEFT --;
 				break;
@@ -199,13 +200,40 @@ public class Breakout extends GraphicsProgram {
 	
 	private void getBallVelocity() {
 		vy = 3.0;
-		vx = rgen.nextDouble(1.0, 3.0);
-		if (rgen.nextBoolean(0.5)) {
-			vx = -vx;
-		}
+		vx = rgen.nextDouble(1.0, 6.0);
 	}
 	
 	private void moveBall() {
+		ball.move(vx, vy);
+		/** check for ball bouncing off the wall, need to invert the vx */
+		if ((ball.getX() <= 0 && vx == 0) || (ball.getX() >= (getWidth() - BALL_RADIUS*2))) {
+			vx = -vx;
+		}
 		
+		if (ball.getY() <= 0 && vy == 0) {
+			vy = -vy;
+		}
+		
+		/** check for collider objects */
+		GObject collider = getCollidingObject();
+		
+		if (collider == paddle) {
+			if (ball.getY() == (getHeight() - (PADDLE_Y_OFFSET + PADDLE_HEIGHT + BALL_RADIUS*2))) {
+				vy = -vy;
+			}
+		} else if (collider != null) {
+			remove(collider);
+			TOTAL_BRICKS --;
+			vy = -vy;
+		}
+		pause(DELAY);
+	}
+	
+	private GObject getCollidingObject() {
+		if ( (getElementAt(ball.getX(), ball.getY()) ) != null) {
+			return getElementAt(ball.getX(), ball.getY());
+		} else {
+			return null;
+		}
 	}
 }
