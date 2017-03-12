@@ -62,20 +62,39 @@ public class Breakout extends GraphicsProgram {
 
 /** Number of turns */
 	private static final int NTURNS = 3;
-
+	
+/** Total number of bricks */
+	private int TOTAL_BRICKS = NBRICKS_PER_ROW * NBRICK_ROWS;
+	
+/** Number of turns remaining */
+	private int NUM_TURNS_LEFT = NTURNS;
+	
+/** Delay for runGame event */	
+	private int DELAY = 10;
+	
+/** vx and vy variables */
+	private double vx, vy;
+	
+/** Random Number Generator for vx */	
+	private RandomGenerator rgen = RandomGenerator.getInstance();
+	
 /* Method: run() */
 /** Runs the Breakout program. */
 	public void run() {
-		gameSetup();
-		playGame();
+		while (NUM_TURNS_LEFT > 0) {	
+			gameSetup();
+			playGame();
+		}
+		ball.setVisible(false);
 	}
 	
-	public void gameSetup() {
+	private void gameSetup() {
 		setUpBricks();
 		setUpPaddle();
+		createBall();
 	}
 	
-	public void setUpBricks() {
+	private void setUpBricks() {
 		int rowCounter = 0;
 		int nextBrick = BRICK_SEP;
 		int nextRow = BRICK_Y_OFFSET;
@@ -125,9 +144,9 @@ public class Breakout extends GraphicsProgram {
 		}		
 	}
 	
-	public GRect paddle;
+	private GRect paddle;
 	
-	public void setUpPaddle() {
+	private void setUpPaddle() {
 		double x = (getWidth() - PADDLE_WIDTH) / 2;
 		double y = getHeight() - PADDLE_Y_OFFSET;
 		paddle = new GRect(x, y, PADDLE_WIDTH, PADDLE_HEIGHT);
@@ -148,8 +167,45 @@ public class Breakout extends GraphicsProgram {
 		}
 	}
 	
-	public void playGame() {
+	private GOval ball;
+	
+	private void createBall() {
+		double x = (getWidth() - BALL_RADIUS) / 2;
+		double y = (getHeight() - BALL_RADIUS) / 2; 
+		ball = new GOval(x, y, BALL_RADIUS * 2, BALL_RADIUS * 2);
+		add(ball);
+		ball.setFillColor(Color.black);
+		ball.setFilled(true);
+	}
+	
+	private void playGame() {
+		if (TOTAL_BRICKS == 0) {
+			ball.setVisible(false);
+			GLabel winner = new GLabel("Congrats, you are a winner!");
+			add(winner);
+		}
+		waitForClick();
+		getBallVelocity();
+		while (true) {
+			if (ball.getY() >= getHeight()) {
+				NUM_TURNS_LEFT --;
+				break;
+			} 
+			if (TOTAL_BRICKS == 0) {
+				break;
+			}
+		}		
+	}
+	
+	private void getBallVelocity() {
+		vy = 3.0;
+		vx = rgen.nextDouble(1.0, 3.0);
+		if (rgen.nextBoolean(0.5)) {
+			vx = -vx;
+		}
+	}
+	
+	private void moveBall() {
 		
 	}
-
 }
